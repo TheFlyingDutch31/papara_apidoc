@@ -10,59 +10,76 @@
 
     <title>Visepays API Dokümentasyonu - Papara</title>
 
-    <style>
-      body {
-        background: -webkit-linear-gradient(right, #0a0a2a, #1e3c72);
-        background: -ms-linear-gradient(right, #0a0a2a, #1e3c72);
-        background: -moz-linear-gradient(right, #0a0a2a, #1e3c72);
-        background: -o-linear-gradient(right, #0a0a2a, #1e3c72);
-        color: #ffffff;
-        font-family: Arial, sans-serif;
-      }
-      .container {
-        width: 80%;
-        margin: auto;
-        padding: 20px;
-      }
-      .box-shadow {
-        background: #162447;
-        border-radius: .35rem;
-        padding: 15px;
-        box-shadow: 0 10px 18px 0 rgba(62, 57, 107, .2);
-      }
-      h1, h2, h3 {
-        color: #a9c9ff;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      th, td {
-        padding: 10px;
-        border: 1px solid #a9c9ff;
-        text-align: left;
-      }
-      th {
-        background-color: #1f4068;
-        color: #ffffff;
-      }
-      tr:nth-child(even) {
-        background-color: #1b2a49;
-      }
-      .mainText {
-        color: #a9c9ff;
-      }
-      .red {
-        color: #ff4f4f;
-      }
-      .green {
-        color: #00e676;
-      }
-      .blue {
-        color: #00b0ff;
-      }
-    </style>
+   <style>
+  body {
+    background: -webkit-linear-gradient(right, #0a0a2a, #1e3c72);
+    background: -ms-linear-gradient(right, #0a0a2a, #1e3c72);
+    background: -moz-linear-gradient(right, #0a0a2a, #1e3c72);
+    background: -o-linear-gradient(right, #0a0a2a, #1e3c72);
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+  }
+  
+  pre {
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    overflow-x: auto;
+    font-size: 14px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+
+  th, td {
+    padding: 10px;
+    border: 1px solid #a9c9ff;
+    text-align: left;
+  }
+
+  th {
+    background-color: #1f4068;
+    color: #ffffff;
+  }
+
+  tr:nth-child(even) {
+    background-color: #1b2a49;
+  }
+
+  h1, h2, h3 {
+    color: #a9c9ff;
+  }
+
+  .box-shadow {
+    background: #162447;
+    border-radius: .35rem;
+    padding: 15px;
+    box-shadow: 0 10px 18px 0 rgba(62, 57, 107, .2);
+  }
+
+  .mainText {
+    color: #a9c9ff;
+  }
+
+  .red {
+    color: #ff4f4f;
+  }
+
+  .green {
+    color: #00e676;
+  }
+
+  .blue {
+    color: #00b0ff;
+  }
+</style>
+
   </head>
   <body>
     <div class="container">
@@ -666,69 +683,69 @@
     </div>
 
     
-<h3>İstek limiti</h3>
-<p>API kullanıcılarının dakikada en fazla 60 istek göndermelerine izin verilmektedir. Bu sınırın aşılması durumunda aşağıdaki hata mesajı dönecektir:</p>
+    <h3>İstek limiti</h3>
+    <p>API kullanıcılarının dakikada en fazla 60 istek göndermelerine izin verilmektedir. Bu sınırın aşılması durumunda aşağıdaki     hata mesajı dönecektir:</p>
 
-<h4>Hata Mesajı:</h4>
-<pre>
-{
-  "durum": 429,
-  "mesaj": "Çok fazla istek. Lütfen bir süre sonra tekrar deneyin."
-}
-</pre>
+    <h4>Hata Mesajı:</h4>
+    <pre>
+    {
+       "durum": 429,
+       "mesaj": "Çok fazla istek. Lütfen bir süre sonra tekrar deneyin."
+    }
+    </pre>
 
-<h3>Hata Kodları</h3>
-<table>
-  <thead>
-    <tr>
-      <th>Hata Kodu</th>
-      <th>Mesaj</th>
-      <th>Açıklama</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>400</td>
-      <td>Bad Request</td>
-      <td>İstek parametreleri eksik veya geçersiz.</td>
-    </tr>
-    <tr>
-      <td>401</td>
-      <td>Unauthorized</td>
-      <td>Geçersiz API anahtarı veya kimlik doğrulama hatası.</td>
-    </tr>
-    <tr>
-      <td>403</td>
-      <td>Forbidden</td>
-      <td>Erişim izni reddedildi.</td>
-    </tr>
-    <tr>
-      <td>404</td>
-      <td>Not Found</td>
-      <td>İstenilen kaynak bulunamadı.</td>
-    </tr>
-    <tr>
-      <td>429</td>
-      <td>Too Many Requests</td>
-      <td>İstek limiti aşıldı. Daha sonra tekrar deneyin.</td>
-    </tr>
-    <tr>
-      <td>500</td>
-      <td>Internal Server Error</td>
-      <td>Sunucu hatası. Lütfen daha sonra tekrar deneyin.</td>
-    </tr>
-  </tbody>
-</table>
+    <h3>Hata Kodları</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Hata Kodu</th>
+          <th>Mesaj</th>
+          <th>Açıklama</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>400</td>
+          <td>Bad Request</td>
+          <td>İstek parametreleri eksik veya geçersiz.</td>
+        </tr>
+        <tr>
+          <td>401</td>
+          <td>Unauthorized</td>
+          <td>Geçersiz API anahtarı veya kimlik doğrulama hatası.</td>
+        </tr>
+        <tr>
+          <td>403</td>
+          <td>Forbidden</td>
+          <td>Erişim izni reddedildi.</td>
+        </tr>
+        <tr>
+          <td>404</td>
+          <td>Not Found</td>
+          <td>İstenilen kaynak bulunamadı.</td>
+        </tr>
+        <tr>
+          <td>429</td>
+          <td>Too Many Requests</td>
+          <td>İstek limiti aşıldı. Daha sonra tekrar deneyin.</td>
+        </tr>
+        <tr>
+          <td>500</td>
+          <td>Internal Server Error</td>
+          <td>Sunucu hatası. Lütfen daha sonra tekrar deneyin.</td>
+        </tr>
+      </tbody>
+    </table>
 
-<h3>Kimlik Doğrulama</h3>
-<p>Visepays API, tüm isteklerde bir API anahtarı gerektirir. İsteklerin başlıklarına aşağıdaki gibi bir kimlik doğrulama başlığı eklenmelidir:</p>
+    <h3>Kimlik Doğrulama</h3>
+    <p>Visepays API, tüm isteklerde bir API anahtarı gerektirir. İsteklerin başlıklarına aşağıdaki gibi bir kimlik doğrulama     başlığı eklenmelidir:</p>
 
-<h4>API Key Kullanımı:</h4>
-<pre>
-GET /api/v1/resource HTTP/1.1
-Host: api.visepays.com
-Authorization: Bearer ornek_api_key_12345 <!-- Bu alan API entegrasyonu sırasında sağlanacaktır -->
-</pre>
+    <h4>API Key Kullanımı:</h4>
+    <pre>
+    GET /api/v1/resource HTTP/1.1
+    Host: api.visepays.com
+    Authorization: Bearer ornek_api_key_12345 <!-- Bu alan API entegrasyonu sırasında sağlanacaktır -->
+    </pre>
 
 <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
