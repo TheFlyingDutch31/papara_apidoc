@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <!-- Gerekli meta etiketleri -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Visepays API Dokümentasyonu - Papara</title>
+
+    <style>
+      body {
+        background: -webkit-linear-gradient(right, #0a0a2a, #1e3c72);
+        background: -ms-linear-gradient(right, #0a0a2a, #1e3c72);
+        background: -moz-linear-gradient(right, #0a0a2a, #1e3c72);
+        background: -o-linear-gradient(right, #0a0a2a, #1e3c72);
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        padding: 20px;
+      }
+      .box-shadow {
+        background: #162447;
+        border-radius: .35rem;
+        padding: 15px;
+        box-shadow: 0 10px 18px 0 rgba(62, 57, 107, .2);
+      }
+      h1, h2, h3 {
+        color: #a9c9ff;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
+      th, td {
+        padding: 10px;
+        border: 1px solid #a9c9ff;
+        text-align: left;
+      }
+      th {
+        background-color: #1f4068;
+        color: #ffffff;
+      }
+      tr:nth-child(even) {
+        background-color: #1b2a49;
+      }
+      .mainText {
+        color: #a9c9ff;
+      }
+      .red {
+        color: #ff4f4f;
+      }
+      .green {
+        color: #00e676;
+      }
+      .blue {
+        color: #00b0ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Visepays API Dokümentasyonu - Papara Metodu</h1>
+      <div class="box-shadow">
+        <h2>Para Yatırma API</h2>
+        <p>Papara yöntemini kullanarak para yatırma işlemi aşağıdaki gibidir:</p>
+        <ol>
+          <li>Müşteri, satıcı sitesindeki Papara para yatırma formunu doldurur.</li>
+          <li>Müşteri aşağıdaki URL'ye yönlendirilir:<br>
+            <u>https://papara.visepays.com/?sid=__SITE_ID__&key=__SITE_KEY__&islem_id=__islem_id__&name=__NAME__&surname=__SURNAME__&oyuncu_id=__oyuncu_id__</u>
+          </li>
+          <li>Kalan işlemler Visepays web sitesinde tamamlanır.</li>
+          <li>Bu metotta kullanılabilecek tüm GET parametreleri aşağıda listelenmiştir.</li>
+        </ol>
+        <h3>GET Parametreleri:</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Parametre</th>
+              <th>Türü</th>
+              <th>Gereklilik</th>
+              <th>Açıklama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>sid</td>
+              <td>metin</td>
+              <td class="red">gerekli</td>
+              <td>Siteye özel ID (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>key</td>
+              <td>metin</td>
+              <td class="red">gerekli</td>
+              <td>Siteye özel anahtar (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>islem_id</td>
+              <td>metin</td>
+              <td class="red">gerekli</td>
+              <td>Her işlem için rastgele oluşturulan işlem ID'si (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>İsim</td>
+              <td>metin</td>
+              <td class="red">gerekli</td>
+              <td>Müşterinin adı</td>
+            </tr>
+            <tr>
+              <td>Soyad</td>
+              <td>metin</td>
+              <td class="red">gerekli</td>
+              <td>Müşterinin soyadı</td>
+            </tr>
+            <tr>
+              <td>oyuncu_id</td>
+              <td>metin</td>
+              <td class="red">gerekli</td>
+              <td>Satıcı sistemindeki oyuncu ID'si</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="box-shadow">
+        <h2>API Geri Bildirim Servisleri</h2>
+        <p>Visepays sistemi, para yatırma veya çekme işleminin sonucunu satıcının sunucusuna bildirmek için geri bildirim servislerini kullanacaktır. Satıcının sunucusunun bu geri bildirimleri kabul edecek ve uygun şekilde işleyecek şekilde yapılandırılması gerekir.</p>
+
+        <h3>Geri Bildirim Servisi: Para Yatırma</h3>
+        <p>Papara yöntemi ile para yatırıldığında, Visepays satıcının geri bildirim URL'sine işlemin durumunu onaylayan bir POST isteği gönderecektir.</p>
+
+        <p style="text-align: center; font-size: 2em;"><i><b><font class="mainText">Visepays</font> → <font color="purple">Site Sağlayıcı</font></b></i></p>
+        <p style="font-size: 1.25em;">POST: <font class="mainText">https://merchant-domain.com/api/visepays/deposit/papara</font></p>
+
+        <h4>İstek Başlıkları:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Başlık</th>
+              <th>Değer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kabul</td>
+              <td>application/json</td>
+            </tr>
+            <tr>
+              <td>İçerik Türü</td>
+              <td>application/json</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>İstek Parametreleri:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Parametre</th>
+              <th>Gereklilik</th>
+              <th>Türü</th>
+              <th>Açıklama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>sid</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Siteye özel ID (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>key</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Siteye özel anahtar (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>servis</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Para yatırma veya para çekme</td>
+            </tr>
+            <tr>
+              <td>metod</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Papara</td>
+            </tr>
+            <tr>
+              <td>islem_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>İlk istekte belirtilen işlem ID'si (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>oyuncu_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Oyuncu ID'si</td>
+            </tr>
+            <tr>
+              <td>miktar</td>
+              <td class="red">gerekli</td>
+              <td>sayı</td>
+              <td>Para yatırma miktarı</td>
+            </tr>
+            <tr>
+              <td>para_birimi</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>İşlemin para birimi (örnek, TRY)</td>
+            </tr>
+            <tr>
+              <td>durum</td>
+              <td class="red">gerekli</td>
+              <td>sayı</td>
+              <td>1 başarılı işlem, 2 diğer işlemler için</td>
+            </tr>
+            <tr>
+              <td>odeme_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Visepays sistemindeki ödeme ID'si (Pxxxxxxxx)</td>
+            </tr>
+            <tr>
+              <td>hash</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>
+                Aşağıdaki parametreler ile HMAC-SHA256 kullanılarak oluşturulan hash:<br>
+                <code>sid|key|miktar|islem_id|odeme_id</code><br>
+                Hash 64'lük tabanda şifrelenmiştir.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+	<h5>Örnek istek:</h5>
+        <div class="alert alert-warning" role="alert">
+	  <pre>
+          {
+            "sid": "f27da0c07c094b0c88768eb5dac3dc80",
+            "key": "Fp2407kzXgHUrZB9LAuwD3S3N8c19EMa",
+	    "servis": "Para yatırma",
+	    "metod": "Papara",
+            "miktar": 200,
+	    "player_id": "u12345",
+            "para_birimi": "TRY",
+            "islem_id": "7e49a9701ad5d2ebda5dcda7a2abf20c",
+            "odeme_id": "P12345678",
+            "durum": 1,
+            "hash": "Y2ZhZTNiYmE1YjIwZTAzZWI2NjhjZTRlOTY0OWFhYzkxY2I5YjIxOWI3NjAyNjVlZTNlNjQ5OTFhMjdlZjliMg=="
+          }
+	  </pre>
+        </div>
+
+
+        <h4>Cevap Parametreleri:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Parametre</th>
+              <th>Türü</th>
+              <th>Açıklama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>durum</td>
+              <td>sayı</td>
+              <td>İşlemin durumu (200 başarılı işlem için)</td>
+            </tr>
+            <tr>
+              <td>mesaj</td>
+              <td>metin</td>
+              <td>İşlem durumu hakkında mesaj</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h5>Başarılı işlem için örnek cevap:</h5>
+        <div class="alert alert-success" role="alert">
+	  <pre>
+          {
+            "durum": 200,
+            "mesaj": "Yatırma işlemi başarılı"
+          }
+	  </pre>
+        </div>
+	<h5>Başarısız işlem için örnek cevap:</h5>
+        <div class="alert alert-danger" role="alert">
+	  <pre>
+          {
+            "durum": 404,
+            "mesaj": "Yatırma işlemi gerçekleştirilemedi"
+          }
+	  </pre>
+        </div>
+
+        <h3>Para Çekme</h3>
+        <p>Papara yöntemi ile para çekme talep edildiğinde, Visepays işlemin durumunu onaylamak için satıcının geri bildirim URL'sine bir POST isteği gönderecektir.</p>
+
+        <p style="text-align: center; font-size: 2em;"><i><b><font class="mainText">Site Sağlayıcı</font> → <font color="purple">Visepays</font></b></i></p>
+        <p style="font-size: 1.25em;">POST: <font class="mainText">https://api.visepays.com/withdraw/papara</font></p>
+
+        <h4>İstek Parametreleri:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Parametre</th>
+              <th>Gereklilik</th>
+              <th>Türü</th>
+              <th>Açıklama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>sid</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Siteye özel ID (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>key</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Siteye özel anahtar (32 karakter)</td>
+            </tr>
+	    <tr>
+              <td>servis</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Para yatırma veya para çekme</td>
+            </tr>
+	    <tr>
+              <td>metod</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Papara</td>
+            </tr>
+	    
+            <tr>
+              <td>islem_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>İlk istekte belirtilen işlem ID'si (32 karakter)</td>
+            </tr>
+	    <tr>
+              <td>oyuncu_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Oyuncu ID'si</td>
+            </tr>
+	    <tr>
+              <td>papara_id</td>
+              <td class="red">gerekli</td>
+              <td>sayı</td>
+              <td> Oyuncunun Papara ID'si</td>
+            </tr>
+	    <tr>
+              <td>bildirim_url</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Para çekme isteğiyle ilgili bilgiler bu URL'ye gönderilir.</td>
+            </tr>
+            <tr>
+              <td>miktar</td>
+              <td class="red">gerekli</td>
+              <td>sayı</td>
+              <td>Para çekme miktarı</td>
+            </tr>
+            <tr>
+              <td>para_birimi</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>İşlemin para birimi (örnek, TRY)</td>
+            </tr>
+            <tr>
+              <td>durum</td>
+              <td class="red">gerekli</td>
+              <td>sayı</td>
+              <td>1 başarılı işlem, 2 diğer işlemler için</td>
+            </tr>
+            <tr>
+              <td>odeme_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Visepays sistemindeki ödeme ID'si (Pxxxxxxxx)</td>
+            </tr>
+            <tr>
+              <td>hash</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>
+                Aşağıdaki parametreler ile HMAC-SHA256 kullanılarak oluşturulan hash:<br>
+                <code>sid|key|miktar|islem_id|odeme_id</code><br>
+                Hash 64'lük tabanda şifrelenmiştir.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+	<h5>Örnek istek:</h5>
+        <div class="alert alert-warning" role="alert">
+	  <pre>
+          {
+            "sid": "f27da0c07c094b0c88768eb5dac3dc80",
+            "key": "Fp2407kzXgHUrZB9LAuwD3S3N8c19EMa",
+	    "servis": "Para Çekme",
+	    "metod": "Papara",
+            "miktar": 200,
+	    "oyuncu_id": "u12345",
+	    "papara_id": 2446177,
+            "para_birimi": "TRY",
+            "islem_id": "7e49a9701ad5d2ebda5dcda7a2abf20c",
+            "odeme_id": "P12345678",
+            "durum": 1,
+	    "bildirim_url": "https://api.visepays.com/notify-test",
+            "hash": "Y2ZhZTNiYmE1YjIwZTAzZWI2NjhjZTRlOTY0OWFhYzkxY2I5YjIxOWI3NjAyNjVlZTNlNjQ5OTFhMjdlZjliMg=="
+          }
+	  </pre>
+        </div>
+
+
+        <h4>Cevap Parametreleri:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Parametre</th>
+              <th>Türü</th>
+              <th>Açıklama</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>durum</td>
+              <td>sayı</td>
+              <td>İşlemin durumu (200 başarılı işlem için)</td>
+            </tr>
+            <tr>
+              <td>mesaj</td>
+              <td>metin</td>
+              <td>İşlem durumu hakkında mesaj</td>
+            </tr>
+	    <tr>
+              <td>odeme_id</td>
+              <td>metin</td>
+              <td>Visepays sistemindeki ödeme ID'si</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h5>Başarılı işlem için örnek cevap:</h5>
+        <div class="alert alert-success" role="alert">
+	  <pre>
+          {
+            "durum": 200,
+            "mesaj": "Para çekme işlemi başarılı"
+	    "odeme_id": "P12345678"
+          }
+	  </pre>
+        </div>
+	<h5>Başarısız işlem için örnek cevap:</h5>
+        <div class="alert alert-danger" role="alert">
+	  <pre>
+          {
+            "durum": 404,
+            "mesaj": "Para çekme işlemi gerçekleştirilemedi"
+	    "odeme_id":
+          }
+	  </pre>
+        </div>
+      </div>
+    </div>
+
+	<h3>Geri Bildirim Servisi: Para Çekme</h3>
+      
+
+        <p style="text-align: center; font-size: 2em;"><i><b><font class="mainText">Visepays</font> → <font color="purple">Site Provider</font></b></i></p>
+        <p style="font-size: 1.25em;">POST: <font class="mainText">notify_url</font></p>
+
+        
+        <h4>İstek Başlıkları:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Başlık</th>
+              <th>Değer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kabul</td>
+              <td>application/json</td>
+            </tr>
+            <tr>
+              <td>Content-Type</td>
+              <td>application/json</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>İstek Parametreleri:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Parametre</th>
+              <th>Gereklilik</th>
+              <th>Tür</th>
+              <th>Tanım</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>sid</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Siteye spesifik atanan ID (32 karakter)</td>
+            </tr>
+            <tr>
+              <td>key</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Siteye spesifik atanan ID (32 karakter)</td>
+            </tr>
+	    <tr>
+              <td>servis</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Para yatırma ya da para çekme</td>
+            </tr>
+	    <tr>
+              <td>metod</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Papara </td>
+            </tr>
+	    
+            <tr>
+              <td>islem_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Orijinal istekte belirtilen işlem id'si (32 karakter)</td>
+            </tr>
+	    <tr>
+              <td>oyuncu_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Oyuncu ID'si</td>
+            </tr>
+	    <tr>
+              <td>papara_id</td>
+              <td class="red">gerekli</td>
+              <td>sayısal</td>
+              <td>Oyuncunun Papara ID </td>
+            </tr>
+	    <tr>
+              <td>miktar</td>
+              <td class="red">gerekli</td>
+              <td>sayısal</td>
+              <td>Para çekme miktarı</td>
+            </tr>
+            <tr>
+              <td>para_birimi</td>
+              <td class="red">gerekli</td>
+              <td>string</td>
+              <td>işlemin para birimi (örnek, TRY)</td>
+            </tr>
+            <tr>
+              <td>durum</td>
+              <td class="red">gerekli</td>
+              <td>sayısal</td>
+              <td>başarılı işlemler için 1, 2 diğerleri için</td>
+            </tr>
+            <tr>
+              <td>odeme_id</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>Visepays sistemindeki ödeme id'si. (Pxxxxxxxx)</td>
+            </tr>
+            <tr>
+              <td>hash</td>
+              <td class="red">gerekli</td>
+              <td>metin</td>
+              <td>
+                HMAC-SHA256 ve aşağıdaki parametreler kullanılarak oluşturulan hash:<br>
+                <code>sid|key|miktar|islem_id|odeme_id</code><br>
+                Hash 64'lük tabanda şifrelenmiştir.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+        <h4>Cevap Parametreleri:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Parametre</th>
+              <th>Tip</th>
+              <th>Tanım</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>durum</td>
+              <td>sayısal</td>
+              <td>İşlemin durumu (başarılı işlemler için 200)</td>
+            </tr>
+            <tr>
+              <td>mesaj</td>
+              <td>metin</td>
+              <td>Para çekme işleminin durumu hakkında mesaj</td>
+            </tr>
+	    
+          </tbody>
+        </table>
+
+        <h5>Örnek istek:</h5>
+        <div class="alert alert-warning" role="alert">
+	  <pre>
+          {
+            "sid": "f27da0c07c094b0c88768eb5dac3dc80",
+            "key": "Fp2407kzXgHUrZB9LAuwD3S3N8c19EMa",
+	    "servis": "Para çekme",
+	    "metod": "Papara",
+            "miktar": 200,
+	    "oyuncu_id": "u12345",
+	    "papara_id": 2446177,
+            "para_birimi": "TRY",
+            "islem_id": "7e49a9701ad5d2ebda5dcda7a2abf20c",
+            "odeme_id": "P12345678",
+            "durum": 1,
+            "hash": "Y2ZhZTNiYmE1YjIwZTAzZWI2NjhjZTRlOTY0OWFhYzkxY2I5YjIxOWI3NjAyNjVlZTNlNjQ5OTFhMjdlZjliMg=="
+          }
+	  </pre>
+        </div>
+
+        <h5>Başarılı işlem için örnek cevap:</h5>
+        <div class="alert alert-success" role="alert">
+	  <pre>
+          {
+            "durum": 200,
+            "mesaj": "Para çekme işlemi başarılı"
+          }
+	  </pre>
+        </div>
+	<h5>Başarısız işlem için örnek cevap:</h5>
+        <div class="alert alert-danger" role="alert">
+	  <pre>
+          {
+            "durum": 404,
+            "mesaj": "Para çekme işlemi gerçekleştirilemedi"
+          }
+	  </pre>
+        </div>
+
+      </div>
+    </div>
+
+    
+<h3>İstek limiti</h3>
+<p>API kullanıcılarının dakikada en fazla 60 istek göndermelerine izin verilmektedir. Bu sınırın aşılması durumunda aşağıdaki hata mesajı dönecektir:</p>
+
+<h4>Hata Mesajı:</h4>
+<pre>
+{
+  "durum": 429,
+  "mesaj": "Çok fazla istek. Lütfen bir süre sonra tekrar deneyin."
+}
+</pre>
+
+<h3>Hata Kodları</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Hata Kodu</th>
+      <th>Mesaj</th>
+      <th>Açıklama</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>400</td>
+      <td>Bad Request</td>
+      <td>İstek parametreleri eksik veya geçersiz.</td>
+    </tr>
+    <tr>
+      <td>401</td>
+      <td>Unauthorized</td>
+      <td>Geçersiz API anahtarı veya kimlik doğrulama hatası.</td>
+    </tr>
+    <tr>
+      <td>403</td>
+      <td>Forbidden</td>
+      <td>Erişim izni reddedildi.</td>
+    </tr>
+    <tr>
+      <td>404</td>
+      <td>Not Found</td>
+      <td>İstenilen kaynak bulunamadı.</td>
+    </tr>
+    <tr>
+      <td>429</td>
+      <td>Too Many Requests</td>
+      <td>İstek limiti aşıldı. Daha sonra tekrar deneyin.</td>
+    </tr>
+    <tr>
+      <td>500</td>
+      <td>Internal Server Error</td>
+      <td>Sunucu hatası. Lütfen daha sonra tekrar deneyin.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Kimlik Doğrulama</h3>
+<p>Visepays API, tüm isteklerde bir API anahtarı gerektirir. İsteklerin başlıklarına aşağıdaki gibi bir kimlik doğrulama başlığı eklenmelidir:</p>
+
+<h4>API Key Kullanımı:</h4>
+<pre>
+GET /api/v1/resource HTTP/1.1
+Host: api.visepays.com
+Authorization: Bearer ornek_api_key_12345 <!-- Bu alan API entegrasyonu sırasında sağlanacaktır -->
+</pre>
+
+<!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  </body>
+</html>
+
